@@ -58,6 +58,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "Mc32DriverAdc.h"
+
+
+
+//#include "C:\microchip\harmony\v2_06\bsp\pic32mx_skes\Mc32DriverLdc.h"
+//#include "C:\microchip\harmony\v2_06\bsp\pic32mx_skes\bsp.h"
+
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -88,6 +95,7 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	APP_STATE_INIT=0,
+    APP_STATE_WAIT = 1, 
 	APP_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
@@ -112,6 +120,7 @@ typedef struct
 {
     /* The application's current state */
     APP_STATES state;
+    S_ADCResults AdcRes;
 
     /* TODO: Define any additional data used by the application. */
 
@@ -196,6 +205,14 @@ void APP_Initialize ( void );
     This routine must be called from SYS_Tasks() routine.
  */
 
+//--Déclarations des fonctions--//
+void APP_Initialize ( void );
+void LED_On(void);
+void Chenillard(void);
+void LED_Off(void);
+void APP_UpdateState(APP_STATES newState);
+
+//--Fonction déjà déclarée--//
 void APP_Tasks( void );
 
 
