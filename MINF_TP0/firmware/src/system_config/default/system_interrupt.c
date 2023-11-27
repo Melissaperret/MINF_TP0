@@ -73,8 +73,21 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
 {
-    APP_UpdateState(APP_STATE_SERVICE_TASKS);
+     // Variables locales
+    static uint8_t timerCount = 0;
+    
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
+    
+    //Premier cycle de APP_STATE_SERVICE_TASKS après 3 secondes
+    if(timerCount == 30)
+    {
+        APP_UpdateState(APP_STATE_SERVICE_TASKS);
+        //Réinitialisation du compteur pour déclencher une interruption toutes les 100ms 
+    }
+    else
+    {
+       timerCount++;   
+    }
 }
  /*******************************************************************************
  End of File
