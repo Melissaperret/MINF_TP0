@@ -206,7 +206,6 @@ void APP_Initialize ( void );
  */
 
 //--Déclarations des fonctions--//
-void APP_Initialize ( void );
 void LED_On(void);
 void Chenillard(void);
 void LED_Off(void);
