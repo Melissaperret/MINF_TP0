@@ -86,6 +86,7 @@ void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
     }
     else
     {
+       // Incrémente le compteur pour compter le nombre d'interruptions (toutes les 100ms)  
        timerCount++;   
     }
 }
