@@ -95,7 +95,7 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	APP_STATE_INIT=0,
-    APP_STATE_WAIT = 1, 
+    	APP_STATE_WAIT = 1, 
 	APP_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
@@ -205,13 +205,13 @@ void APP_Initialize ( void );
     This routine must be called from SYS_Tasks() routine.
  */
 
-//--DÈclarations des fonctions--//
+//--D√©clarations des fonctions--//
 void LED_On(void);
 void Chenillard(void);
 void LED_Off(void);
 void APP_UpdateState(APP_STATES newState);
 
-//--Fonction dÈj‡ dÈclarÈe--//
+//--Fonction d√©j√† d√©clar√©e--//
 void APP_Tasks( void );
 
 
