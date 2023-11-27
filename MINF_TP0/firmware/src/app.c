@@ -79,7 +79,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_DATA appData;
-S_ADCResults AdcRes;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -136,24 +135,27 @@ void APP_Initialize ( void )
  */
 
 void APP_Tasks ( void )
-{                                 
+{                     
+     //Tableau de constantes pour allumer les leds
+    static BSP_LED LED[8] = {BSP_LED_0, BSP_LED_1, BSP_LED_2, BSP_LED_3, BSP_LED_4, BSP_LED_5, BSP_LED_6, BSP_LED_7};
+    
     /* Check the application's current state. */
     switch ( appData.state )
     {
         /* Application's initial state. */
         case APP_STATE_INIT:
         {
-            bool appInitialized = true;
-            
             // Initialisation du LCD
             lcd_init();
             
-            //Affichage sur le LCD (TP + nom)
+            //Affichage sur la première ligne 
             lcd_gotoxy(1,1); 
             printf_lcd("Tp0 Led+AD 2023-24");
+            //Affichage sur la deuxième ligne 
             lcd_gotoxy(1,2); 
             printf_lcd("Perret");
-            lcd_bl_on();
+            //Activation rétro-éclairage
+            lcd_bl_on();   
             
             // Initialisation de l'ADC
             BSP_InitADC10();
@@ -164,15 +166,18 @@ void APP_Tasks ( void )
             // Start timer 1
             DRV_TMR0_Start();
         
-            if (appInitialized)
-            {
-                appData.state = APP_STATE_WAIT;
-            }
+            //Prochain état = WAIT 
+            appData.state = APP_STATE_WAIT;
+        
             break;
         }
 
         case APP_STATE_SERVICE_TASKS:
         {
+            //Initialisation variables 
+            static uint8_t i = 7; 
+            S_ADCResults AdcRes;
+ 
             //Eteindre toutes les leds
             static bool LEDs_OFF = true; 
             
@@ -182,10 +187,27 @@ void APP_Tasks ( void )
                 LEDs_OFF = false;
             }
 
+           
             lcd_gotoxy (1,3); 
             AdcRes =  BSP_ReadAllADC (); //Lecture d'ADC
             printf_lcd("Ch0:%4d Ch1:%4d", AdcRes.Chan0, AdcRes.Chan1); //Affichage valeurs lues sur ADC
-            Chenillard(); // Chenillard activé
+            
+            //Eteindre la led précédente pour le chenillard 
+            BSP_LEDOff(LED[i]);
+            //pour allumer la led 0  
+            if (i == 7)
+            {
+                i = 0;
+            }
+            //Pour allumer les autres leds
+            else 
+            {
+                i = i+1;   
+            }
+            //Allumer la LED sélectionné via le tableau
+            BSP_LEDOn(LED[i]); 
+            
+            
             appData.state = APP_STATE_WAIT; // Changement d'état
             break;
             
@@ -213,86 +235,29 @@ void APP_UpdateState(APP_STATES newState)
 
 void LED_On (void) //fonction allumage des LEDS
 {
-    BSP_LEDOn (BSP_LED_0);
-    BSP_LEDOn (BSP_LED_1);
-    BSP_LEDOn (BSP_LED_2);
-    BSP_LEDOn (BSP_LED_3);
-    BSP_LEDOn (BSP_LED_4);
-    BSP_LEDOn (BSP_LED_5);
-    BSP_LEDOn (BSP_LED_6);
-    BSP_LEDOn (BSP_LED_7);
+    BSP_LEDOn(BSP_LED_0);
+    BSP_LEDOn(BSP_LED_1);
+    BSP_LEDOn(BSP_LED_2);
+    BSP_LEDOn(BSP_LED_3);
+    BSP_LEDOn(BSP_LED_4);
+    BSP_LEDOn(BSP_LED_5);
+    BSP_LEDOn(BSP_LED_6);
+    BSP_LEDOn(BSP_LED_7);
 }
 
  void LED_Off (void)//fonction éteinte des LEDS
  {
-    BSP_LEDOff (BSP_LED_0);
-    BSP_LEDOff (BSP_LED_1);
-    BSP_LEDOff (BSP_LED_2);
-    BSP_LEDOff (BSP_LED_3);
-    BSP_LEDOff (BSP_LED_4);
-    BSP_LEDOff (BSP_LED_5);
-    BSP_LEDOff (BSP_LED_6);
-    BSP_LEDOff (BSP_LED_7);
+    BSP_LEDOff(BSP_LED_0);
+    BSP_LEDOff(BSP_LED_1);
+    BSP_LEDOff(BSP_LED_2);
+    BSP_LEDOff(BSP_LED_3);
+    BSP_LEDOff(BSP_LED_4);
+    BSP_LEDOff(BSP_LED_5);
+    BSP_LEDOff(BSP_LED_6);
+    BSP_LEDOff(BSP_LED_7);
  }
 
-void Chenillard (void) //fonction chenillard
-{  
-    static uint32_t modes = 0; //variable reste en mémoire
-    switch (modes)
-    {
-        case 0:
-            BSP_LEDOff (BSP_LED_7) ;
-            BSP_LEDOn (BSP_LED_0) ;
-            break ;
 
-        case 1:
-             BSP_LEDOff (BSP_LED_0) ;
-             BSP_LEDOn (BSP_LED_1) ;
-            break ;
-
-        case 2:
-            BSP_LEDOff (BSP_LED_1) ;
-            BSP_LEDOn (BSP_LED_2) ;
-            break ;
-
-        case 3:
-            BSP_LEDOff (BSP_LED_2) ;
-            BSP_LEDOn (BSP_LED_3) ;
-            break ;
-
-        case 4:
-            BSP_LEDOff (BSP_LED_3) ;
-            BSP_LEDOn (BSP_LED_4) ;
-            break ;
-
-        case 5:
-            BSP_LEDOff (BSP_LED_4) ;
-            BSP_LEDOn (BSP_LED_5) ;
-            break ;
-
-        case 6:
-            BSP_LEDOff (BSP_LED_5) ;
-            BSP_LEDOn (BSP_LED_6) ;
-            break ;
-
-        case 7:
-            BSP_LEDOff (BSP_LED_6) ;
-            BSP_LEDOn (BSP_LED_7) ;
-            break ;
-
-        default :
-            break;
-    }
-
-    if (modes < 7) //changement de case du switch
-    {
-        modes ++;
-    }
-    else
-    {
-        modes = 0; //retourne au case 0 lorsque dernier case du switch atteinte
-    }
-}
 
  
 
