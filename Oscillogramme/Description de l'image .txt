@@ -1,0 +1,7 @@
+C1 correspond à la led BSP_LED_0 (D6)
+C2 correspond à la led BSP_LED_1 (D10)
+C3 correspond à la led BSP_LED_2 (D7)
+C4 correspond à la led BSP_LED_3 (D11)
+   
+Chaque LEDs s'allument bien pendant 100ms. J'ai effectué la mesure sur le temps total ou on peut voir 400ms, ce qui est correct. 
+
