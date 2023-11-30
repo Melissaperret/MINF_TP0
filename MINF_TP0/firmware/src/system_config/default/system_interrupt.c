@@ -79,7 +79,7 @@ void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
     
     //Premier cycle de APP_STATE_SERVICE_TASKS après 3 secondes
-    if(timerCount == 30)
+    if(timerCount < 30)
     {
         APP_UpdateState(APP_STATE_SERVICE_TASKS);
         //Réinitialisation du compteur pour déclencher une interruption toutes les 100ms 
