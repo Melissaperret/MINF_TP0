@@ -62,6 +62,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "system/common/sys_common.h"
 #include "app.h"
 #include "system_definitions.h"
+#include <stdint.h>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -75,11 +76,9 @@ void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
 {
      // Variables locales
     static uint8_t timerCount = 0;
-    
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
-    
+
     //Premier cycle de APP_STATE_SERVICE_TASKS après 3 secondes
-    if(timerCount == 29)  //29 car on commmence à 0, donc on fait 30-1 
+    if(timerCount >= 29)  //29 car on commmence à 0, donc on fait 30-1 
     {
         APP_UpdateState(APP_STATE_SERVICE_TASKS);
         //Réinitialisation du compteur pour déclencher une interruption toutes les 100ms 
@@ -89,6 +88,8 @@ void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
        // Incrémente le compteur pour compter le nombre d'interruptions (toutes les 100ms)  
        timerCount++;   
     }
+ 
+ PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
 }
  /*******************************************************************************
  End of File
