@@ -148,13 +148,13 @@ void APP_Tasks ( void )
             // Initialisation du LCD
             lcd_init();
             
-            //Affichage sur la première ligne 
+            //Affichage sur la premiÃ¨re ligne 
             lcd_gotoxy(1,1); 
             printf_lcd("Tp0 Led+AD 2023-24");
-            //Affichage sur la deuxième ligne 
+            //Affichage sur la deuxiÃ¨me ligne 
             lcd_gotoxy(1,2); 
             printf_lcd("Perret");
-            //Activation rétro-éclairage
+            //Activation rÃ©tro-Ã©clairage
             lcd_bl_on();   
             
             // Initialisation de l'ADC
@@ -166,7 +166,7 @@ void APP_Tasks ( void )
             // Start timer 1
             DRV_TMR0_Start();
         
-            //Prochain état = WAIT 
+            //Prochain Ã©tat = WAIT 
             appData.state = APP_STATE_WAIT;
         
             break;
@@ -192,23 +192,11 @@ void APP_Tasks ( void )
             AdcRes =  BSP_ReadAllADC (); //Lecture d'ADC
             printf_lcd("Ch0:%4d Ch1:%4d", AdcRes.Chan0, AdcRes.Chan1); //Affichage valeurs lues sur ADC
             
-            //Eteindre la led précédente pour le chenillard 
-            BSP_LEDOff(LED[i]);
-            //pour allumer la led 0  
-            if (i == 7)
-            {
-                i = 0;
-            }
-            //Pour allumer les autres leds
-            else 
-            {
-                i = i+1;   
-            }
-            //Allumer la LED sélectionné via le tableau
-            BSP_LEDOn(LED[i]); 
+            //Eteindre la led prÃ©cÃ©dente pour le chenillard 
+            Chenillard();
             
             
-            appData.state = APP_STATE_WAIT; // Changement d'état
+            appData.state = APP_STATE_WAIT; // Changement d'Ã©tat
             break;
             
         }        
@@ -230,32 +218,45 @@ void APP_Tasks ( void )
 
 void APP_UpdateState(APP_STATES newState)
 {
-     appData.state = newState; //mise à jour d'état
+     appData.state = newState; //mise Ã  jour d'Ã©tat
 }
 
-void LED_On (void) //fonction allumage des LEDS
-{
-    BSP_LEDOn(BSP_LED_0);
-    BSP_LEDOn(BSP_LED_1);
-    BSP_LEDOn(BSP_LED_2);
-    BSP_LEDOn(BSP_LED_3);
-    BSP_LEDOn(BSP_LED_4);
-    BSP_LEDOn(BSP_LED_5);
-    BSP_LEDOn(BSP_LED_6);
-    BSP_LEDOn(BSP_LED_7);
-}
-
- void LED_Off (void)//fonction éteinte des LEDS
+  void LED_On(void) // fonction allumage des LEDS
  {
-    BSP_LEDOff(BSP_LED_0);
-    BSP_LEDOff(BSP_LED_1);
-    BSP_LEDOff(BSP_LED_2);
-    BSP_LEDOff(BSP_LED_3);
-    BSP_LEDOff(BSP_LED_4);
-    BSP_LEDOff(BSP_LED_5);
-    BSP_LEDOff(BSP_LED_6);
-    BSP_LEDOff(BSP_LED_7);
+	for(int i = 0; i < 7; i++ ) // NOMBRE_LED = constante 
+	 {
+		 BSP_LEDOn(LED[i]);
+	 }
  }
+
+  void LED_Off(void) // fonction allumage des LEDS
+ {
+	for(int i = 0; i < 7; i++ ) // NOMBRE_LED = constante 
+	 {
+		 BSP_LEDOff(LED[i]);
+	 }
+ }
+
+void Chenillard ();
+{
+	static uint8_t i = 7;
+	
+	//Eteindre la led prÃ©cÃ©dente pour le chenillard 
+	BSP_LEDOff(LED[i]);
+	if (i == 7)
+	{
+		i = 0;
+	}
+	//Pour allumer les autres leds
+	else 
+	{
+		i = i+1;   
+	}
+	
+	 //Allumer la LED sÃ©lectionnÃ©e via le tableau
+     BSP_LEDOn(LED[i]); 
+}
+
 
 
 
