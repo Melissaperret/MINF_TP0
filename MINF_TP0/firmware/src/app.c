@@ -174,10 +174,6 @@ void APP_Tasks ( void )
 
         case APP_STATE_SERVICE_TASKS:
         {
-            //Initialisation variables 
-            static uint8_t i = 7; 
-            S_ADCResults AdcRes;
- 
             //Eteindre toutes les leds
             static bool LEDs_OFF = true; 
             
@@ -189,7 +185,7 @@ void APP_Tasks ( void )
 
            
             lcd_gotoxy (1,3); 
-            AdcRes =  BSP_ReadAllADC (); //Lecture d'ADC
+            appData.AdcRes =  BSP_ReadAllADC (); //Lecture d'ADC
             printf_lcd("Ch0:%4d Ch1:%4d", AdcRes.Chan0, AdcRes.Chan1); //Affichage valeurs lues sur ADC
             
             //Eteindre la led précédente pour le chenillard 
